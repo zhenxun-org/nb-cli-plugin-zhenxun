@@ -1,0 +1,9 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "python.formatting.provider": "none",
+    "black-formatter.args": [
+        "--preview"
+      ]
+}
