@@ -43,6 +43,7 @@ async def check_path(ctx: click.Context) -> str:
                 "当前目录下已存在同名项目文件夹，如何操作?",
                 [
                     Choice("删除该文件夹并重新安装", "delete"),
+                    Choice("使用该文件夹继续", "use"),
                     Choice("重新命名", "rename"),
                     Choice("取消安装", "exit"),
                 ],
@@ -50,6 +51,8 @@ async def check_path(ctx: click.Context) -> str:
             ).prompt_async(style=CLI_DEFAULT_STYLE)
             if dir_choice.data == "rename":
                 pass
+            elif dir_choice.data == "use":
+                return f"{project_name}[use]"
             elif dir_choice.data == "delete":
 
                 def delete(func, path_, execinfo):
@@ -116,21 +119,45 @@ async def setting_env(ctx: click.Context, project_name: str):
 
 
 async def install_poetry(
-    project_path: Path, python_path: str | None, pip_args: list[str] | None = None
+    project_path: Path,
+    python_path: str,
+    pip_args: list[str] | None = None,
 ):
     """
-    安装poetry
+    安装包
     """
     if pip_args is None:
         pip_args = []
-    if python_path is None:
-        python_path = await get_default_python()
     return await asyncio.create_subprocess_exec(
         python_path,
         "-m",
         "pip",
         "install",
         "poetry",
+        *pip_args,
+        cwd=project_path.absolute(),
+    )
+
+
+async def install_package(
+    project_path: Path,
+    python_path: str,
+    package: str,
+    pip_args: list[str] | None = None,
+):
+    """
+    安装包
+    """
+    if pip_args is None:
+        pip_args = []
+    return await asyncio.create_subprocess_exec(
+        python_path,
+        "-m",
+        "poetry",
+        "run",
+        "pip",
+        "install",
+        package,
         *pip_args,
         cwd=project_path.absolute(),
     )
@@ -143,13 +170,23 @@ async def install_dependencies(
 ):
     if pip_args is None:
         pip_args = []
+    if python_path is None:
+        python_path = await get_default_python()
     project_path = Path() / project_name
     click.secho("开始安装Poetry包管理器...", fg="yellow")
     proc = await install_poetry(project_path, python_path, pip_args)
     await proc.wait()
-    click.secho("安装Poetry包管理器完成！", fg="yellow")
-    if python_path is None:
-        python_path = await get_default_python()
+    click.secho("Poetry包管理器安装完成！", fg="yellow")
+    click.secho("开始在依赖环境中安装nb-cli...", fg="yellow")
+    proc = await install_package(project_path, python_path, "nb-cli", pip_args)
+    await proc.wait()
+    click.secho("依赖环境中nb-cli安装完成！", fg="yellow")
+    click.secho("开始在依赖环境中安装nb-cli-plugin-zhenxun...", fg="yellow")
+    proc = await install_package(
+        project_path, python_path, "nb-cli-plugin-zhenxun", pip_args
+    )
+    await proc.wait()
+    click.secho("依赖环境中安装nb-cli-plugin-zhenxun安装完成！", fg="yellow")
     click.secho("开始尝试安装小真寻依赖...", fg="yellow")
     return await asyncio.create_subprocess_exec(
         python_path,

@@ -68,13 +68,15 @@ async def create(
             ctx.exit()
         project_name = await check_path(ctx)
         if not project_name:
-            click.secho("项目克隆源码失败...", fg="yellow")
+            click.secho("获取项目名称...", fg="yellow")
             ctx.exit()
-        click.secho(f"开始安装({install_choice.name})小真寻...", fg="yellow")
-        if install_choice.data == "download":
-            await run_download_install(ctx, project_name)
-        else:
-            await run_git_install(ctx, project_name)
+        if not project_name.endswith("[use]"):
+            click.secho(f"开始安装({install_choice.name})小真寻...", fg="yellow")
+            if install_choice.data == "download":
+                await run_download_install(ctx, project_name)
+            else:
+                await run_git_install(ctx, project_name)
+        project_name = project_name.replace("[use]", "")
         await setting_env(ctx, project_name)
         is_install_dependencies = await ConfirmPrompt(
             "是否立刻安装依赖?",
@@ -91,7 +93,7 @@ async def create(
 
         if is_install_dependencies:
             click.secho(
-                "一切准备就绪，请使用命令\ncd zhenxun_bot(安装的项目名称)"
+                f"一切准备就绪，请使用命令\ncd {project_name}(安装的项目名称)"
                 "\npoetry run python bot.py\n启动小真寻吧！",
                 fg="yellow",
             )

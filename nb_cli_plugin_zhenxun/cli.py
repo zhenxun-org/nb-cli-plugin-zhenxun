@@ -56,9 +56,10 @@ async def zhenxun(ctx: click.Context):
     await run_sync(ctx.invoke)(sub_cmd)
 
 
-from .commands import create
+from .commands import create, run
 
 zhenxun.add_command(create)
+zhenxun.add_command(run)
 
 
 @zhenxun.command(

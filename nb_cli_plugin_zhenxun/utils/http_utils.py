@@ -1,6 +1,5 @@
 import asyncio
 from asyncio.exceptions import TimeoutError
-import logging
 from pathlib import Path
 import time
 from typing import Any
@@ -65,7 +64,7 @@ class AsyncHttpx:
             except Exception as e:
                 last_exception = e
                 if url != urls[-1]:
-                    logging.warning(f"获取 {url} 失败, 尝试下一个")
+                    print(f"获取 {url} 失败, 尝试下一个")
         raise last_exception or Exception("All URLs failed")
 
     @classmethod
@@ -184,7 +183,7 @@ class AsyncHttpx:
                             content = response.content
                             with open(path, "wb") as wf:  # noqa: ASYNC230
                                 wf.write(content)
-                                logging.info(f"下载 {u} 成功.. Path：{path.absolute()}")
+                                print(f"下载 {u} 成功.. Path：{path.absolute()}")
                         else:
                             async with httpx.AsyncClient(verify=verify) as client:
                                 async with client.stream(
@@ -198,7 +197,7 @@ class AsyncHttpx:
                                     **kwargs,
                                 ) as response:
                                     response.raise_for_status()
-                                    logging.info(
+                                    print(
                                         f"开始下载 {path.name}.. "
                                         f"Url: {u}.. "
                                         f"Path: {path.absolute()}"
@@ -225,16 +224,16 @@ class AsyncHttpx:
                                                     download_task,
                                                     completed=response.num_bytes_downloaded,
                                                 )
-                                        logging.info(
+                                        print(
                                             f"下载 {u} 成功.. "
                                             f"Path：{path.absolute()}"
                                         )
                         return True
                     except (TimeoutError, ConnectTimeout, HTTPStatusError):
-                        logging.warning(f"下载 {u} 失败.. 尝试下一个地址..")
-            logging.error(f"下载 {url} 下载超时.. Path：{path.absolute()}")
+                        print(f"下载 {u} 失败.. 尝试下一个地址..")
+            print(f"下载 {url} 下载超时.. Path：{path.absolute()}")
         except Exception:
-            logging.error(f"下载 {url} 错误 Path：{path.absolute()}")
+            print(f"下载 {url} 错误 Path：{path.absolute()}")
         return False
 
     @classmethod
@@ -255,7 +254,7 @@ class AsyncHttpx:
                 "content_length": content_length,
             }
 
-        logging.info(f"开始获取最快镜像，可能需要一段时间... | URL列表：{url_list}")
+        print(f"开始获取最快镜像，可能需要一段时间... | URL列表：{url_list}")
         results = await asyncio.gather(
             *(head_mirror(cls, url) for url in url_list),
             return_exceptions=True,
@@ -263,9 +262,9 @@ class AsyncHttpx:
         _results: list[dict[str, Any]] = []
         for result in results:
             if isinstance(result, BaseException):
-                logging.error(f"获取镜像失败，错误：{result}")
+                print(f"获取镜像失败，错误：{result}")
             else:
-                logging.info(f"获取镜像成功，结果：{result}")
+                print(f"获取镜像成功，结果：{result}")
                 _results.append(result)
         _results = sorted(iter(_results), key=lambda r: r["elapsed_time"])
         return [result["url"] for result in _results]

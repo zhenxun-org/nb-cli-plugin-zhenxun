@@ -63,6 +63,7 @@ ignore = [
     "RUF002", # ambiguous-unicode-character-docstring
     "RUF003", # ambiguous-unicode-character-comment
     "TID252", # relative-imports
+    "T201"
 ]
 
 [tool.ruff.lint.isort]
