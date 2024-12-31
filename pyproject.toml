@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nb-cli-plugin-zhenxun"
-version = "0.1.9"
+version = "0.2.4"
 description = "Nonebot Cli plugin for zhenxun"
 authors = ["HibiKier <775757368@qq.com>"]
 keywords = ["nonebot2", "nb-cli"]

@@ -50,7 +50,7 @@ async def run(ctx: click.Context, cwd: str, python_interpreter: str | None):
     proc = await asyncio.create_subprocess_exec(
         python_path,
         "-m",
-        *["poetry", "run", "bot.py"],
+        *["poetry", "run", "python", "bot.py"],
         cwd=cwd,
     )
     task = asyncio.create_task(wait_for_exit())

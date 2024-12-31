@@ -187,6 +187,10 @@ async def install_dependencies(
     )
     await proc.wait()
     click.secho("依赖环境中安装nb-cli-plugin-zhenxun安装完成！", fg="yellow")
+    click.secho("开始在依赖环境中安poetry...", fg="yellow")
+    proc = await install_package(project_path, python_path, "poetry", pip_args)
+    await proc.wait()
+    click.secho("依赖环境中poetry安装完成！", fg="yellow")
     click.secho("开始尝试安装小真寻依赖...", fg="yellow")
     return await asyncio.create_subprocess_exec(
         python_path,

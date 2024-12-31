@@ -93,15 +93,20 @@ async def create(
 
         if is_install_dependencies:
             click.secho(
-                f"一切准备就绪，请使用命令\ncd {project_name}(安装的项目名称)"
-                "\npoetry run python bot.py\n启动小真寻吧！",
+                f"一切准备就绪，请使用命令\ncd {project_name}(安装的项目名称)\n"
+                "poetry run python bot.py\n"
+                "或\n"
+                "nb zx start\n"
+                "启动小真寻吧！",
                 fg="yellow",
             )
         else:
             click.secho(
                 "请在手动安装环境（项目根目录，命令: poetry install）后\n"
-                "cd zhenxun_bot(安装的项目名称)\n"
+                f"cd {project_name}(安装的项目名称)\n"
                 "poetry run python bot.py\n"
+                "或\n"
+                "nb zx start\n"
                 "启动小真寻吧！",
                 fg="yellow",
             )
