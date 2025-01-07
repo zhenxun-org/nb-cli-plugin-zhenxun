@@ -43,4 +43,4 @@ _✨ 为[小真寻](https://github.com/HibiKier/zhenxun_bot)定制的 NoneBot2 C
 
 ## ❤ 感谢
 
-- [小派蒙脚手架](CMHopeSunshine/nb-cli-plugin-littlepaimon) : 项目参考
+- [小派蒙脚手架](https://github.com/CMHopeSunshine/nb-cli-plugin-littlepaimon) : 项目参考
