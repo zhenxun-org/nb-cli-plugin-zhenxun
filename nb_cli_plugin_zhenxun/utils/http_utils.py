@@ -225,8 +225,7 @@ class AsyncHttpx:
                                                     completed=response.num_bytes_downloaded,
                                                 )
                                         print(
-                                            f"下载 {u} 成功.. "
-                                            f"Path：{path.absolute()}"
+                                            f"下载 {u} 成功.. Path：{path.absolute()}"
                                         )
                         return True
                     except (TimeoutError, ConnectTimeout, HTTPStatusError):
